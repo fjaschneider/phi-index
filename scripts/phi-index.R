@@ -12,33 +12,28 @@ Dur <- sum(df$R_mm_h > 0)*(delta_t)/60
 I <- Rain - DHR
 phi_index <- I/Dur
 
-Dur2 <- sum(subset(df, R_mm_h > phi_index & R_mm_h != 0, select = R_mm_h) > 0)*(delta_t)/60
-R_phi1 <- sum(subset(df, R_mm_h < phi_index & R_mm_h != 0, select = R_mm_h))*delta_t/60
-phi_index2 <- (Rain - DHR - R_phi1)/Dur2
+phi_index_old = phi_index
+
+for(i in seq(10)){
+  
+  Dur <- sum(subset(df, R_mm_h > phi_index_old & R_mm_h != 0, select = R_mm_h) > 0)*(delta_t)/60
+  R_phi <- sum(subset(df, R_mm_h < phi_index_old & R_mm_h != 0, select = R_mm_h))*delta_t/60
+  phi_index_new <- (Rain - DHR - R_phi)/Dur
+  phi_index_old <- phi_index_new
+  
+}
+
+phi <- phi_index_new
 
 
-Dur3 <- sum(subset(df, R_mm_h > phi_index2 & R_mm_h != 0, select = R_mm_h) > 0)*(delta_t)/60
-R_phi2 <- sum(subset(df, R_mm_h < phi_index2 & R_mm_h != 0, select = R_mm_h))*delta_t/60
-phi_index3 <- (Rain - DHR - R_phi2)/Dur3
+R_effective <- sum(subset(df, R_mm_h > phi, select = R_mm_h) - phi)*delta_t/60
+time_effective <- sum(subset(df, R_mm_h > phi, select = R_mm_h) - phi > 0)*delta_t/60
 
 
-Dur4 <- sum(subset(df, R_mm_h > phi_index3 & R_mm_h != 0, select = R_mm_h) > 0)*(delta_t)/60
-R_phi3 <- sum(subset(df, R_mm_h < phi_index3 & R_mm_h != 0, select = R_mm_h))*delta_t/60
-phi_index4 <- (Rain - DHR - R_phi3)/Dur4
-
-
-Dur5 <- sum(subset(df, R_mm_h > phi_index4 & R_mm_h != 0, select = R_mm_h) > 0)*(delta_t)/60
-R_phi4 <- sum(subset(df, R_mm_h < phi_index4 & R_mm_h != 0, select = R_mm_h))*delta_t/60
-phi_index5 <- (Rain - DHR - R_phi4)/Dur5
-
-
-R_effective <- sum(subset(df, R_mm_h > phi_index5, select = R_mm_h) - phi_index5)*delta_t/60
-time_effective <- sum(subset(df, R_mm_h > phi_index5, select = R_mm_h) - phi_index5 > 0)*delta_t/60
-
-
-list('phi-index (mm/h)' = phi_index5,
+list('phi-index (mm/h)' = phi,
      'Rain effective (mm)' = R_effective,
      'time effective (h)' = time_effective)
 
+## Problemas
 
-
+df$R_excess <- df$R_mm_h - phi
