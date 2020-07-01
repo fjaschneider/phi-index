@@ -1,4 +1,9 @@
-# phi-index
+################################################################################
+#                               phi-index                                      #
+#                     Por Fabio José Andres Schneider                          #
+#         Participação José Américo Nabuco Leva Ferreira de Freitas            #
+#                                                                              #
+################################################################################         
 
 A_m2 <- 24384
 
@@ -34,6 +39,15 @@ list('phi-index (mm/h)' = phi,
      'Rain effective (mm)' = R_effective,
      'time effective (h)' = time_effective)
 
-## Problemas
+df$R_excess <- ifelse(df$R_mm_h < phi, 0, df$R_mm_h - phi)
 
-df$R_excess <- df$R_mm_h - phi
+library(ggplot2)
+library(egg)
+
+ggplot(data = df) +
+  geom_col(aes(Time_min, R_mm_h), fill = 1) +
+  geom_col(aes(Time_min, R_excess), fill = 2) +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,150)) +
+  scale_fill_manual(labels = c('Rain', 'Rain excess')) +
+  theme_article()
