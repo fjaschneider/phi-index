@@ -38,3 +38,8 @@ time_effective <- sum(subset(df, R_mm_h > phi_index5, select = R_mm_h) - phi_ind
 list('phi-index' = phi_index5,
      'Rain effective' = R_effective,
      'time effective' = time_effective)
+
+function(data, rounds) {
+  
+  data <- subset(df, R_mm_h > 0, select = R_mm_h)
+}
