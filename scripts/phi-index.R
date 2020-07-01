@@ -1,9 +1,7 @@
-################################################################################
-#                               phi-index                                      #
-#                     Por Fabio José Andres Schneider                          #
-#         Participação José Américo Nabuco Leva Ferreira de Freitas            #
-#                                                                              #
-################################################################################         
+## phi-index
+
+# by Fabio José Andres Schneider
+# participation José Américo Nabuco Leva Ferreira de Freitas
 
 A_m2 <- 24384
 
@@ -45,9 +43,19 @@ library(ggplot2)
 library(egg)
 
 ggplot(data = df) +
-  geom_col(aes(Time_min, R_mm_h), fill = 1) +
-  geom_col(aes(Time_min, R_excess), fill = 2) +
+  geom_col(aes(Time_min, R_mm_h, fill = 'R_mm_h')) +
+  geom_col(aes(Time_min, R_excess, fill = 'R_excess')) +
   scale_x_continuous(expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0), limits = c(0,150)) +
-  scale_fill_manual(labels = c('Rain', 'Rain excess')) +
-  theme_article()
+  scale_fill_manual(breaks = c('R_mm_h', 'R_excess'),
+                    values = c(1,2),
+                    labels = c('Rain (mm/h)', 'Rain excess (mm/h)')) +
+  labs(x = 'Time (min)', y = 'Rain (mm/h)') +
+  theme_article() +
+  theme(axis.title.x = element_text(size = 12, family = "serif")) +
+  theme(axis.title.y = element_text(size = 12, family = "serif")) +
+  theme(axis.text.x = element_text(size = 12, family = "serif")) +
+  theme(axis.text.y = element_text(size = 12, family = "serif")) +
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 12, family = "serif"),
+        legend.position = c(0.8,0.9))
